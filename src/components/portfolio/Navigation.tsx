@@ -1,10 +1,12 @@
 
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -16,6 +18,11 @@ const Navigation = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
+    if (location.pathname !== '/') {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -24,11 +31,11 @@ const Navigation = () => {
   };
 
   const navItems = [
-    { id: 'hero', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'skills', label: 'Skills' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
+    { id: 'hero', label: 'Home', isRoute: false, path: '/' },
+    { id: 'about', label: 'About', isRoute: true, path: '/about' },
+    { id: 'skills', label: 'Skills', isRoute: true, path: '/skills' },
+    { id: 'projects', label: 'Projects', isRoute: true, path: '/projects' },
+    { id: 'contact', label: 'Contact', isRoute: false, path: '/' },
   ];
 
   return (
@@ -37,23 +44,33 @@ const Navigation = () => {
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <button
-            onClick={() => scrollToSection('hero')}
+          <Link
+            to="/"
             className="text-xl font-bold text-primary hover:text-primary/80 transition-colors"
           >
             Portfolio
-          </button>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-8">
             {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => scrollToSection(item.id)}
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                {item.label}
-              </button>
+              item.isRoute ? (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => scrollToSection(item.id)}
+                  className="text-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </button>
+              )
             ))}
           </div>
 
@@ -72,13 +89,24 @@ const Navigation = () => {
           <div className="md:hidden bg-background border-t border-border">
             <div className="px-2 pt-2 pb-3 space-y-1">
               {navItems.map((item) => (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className="block px-3 py-2 text-foreground hover:text-primary transition-colors w-full text-left"
-                >
-                  {item.label}
-                </button>
+                item.isRoute ? (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    onClick={() => setIsOpen(false)}
+                    className="block px-3 py-2 text-foreground hover:text-primary transition-colors w-full text-left"
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <button
+                    key={item.id}
+                    onClick={() => scrollToSection(item.id)}
+                    className="block px-3 py-2 text-foreground hover:text-primary transition-colors w-full text-left"
+                  >
+                    {item.label}
+                  </button>
+                )
               ))}
             </div>
           </div>

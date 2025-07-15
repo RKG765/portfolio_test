@@ -2,10 +2,6 @@
 import { useState, useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import Hero from '@/components/portfolio/Hero';
-import About from '@/components/portfolio/About';
-import Skills from '@/components/portfolio/Skills';
-import Projects from '@/components/portfolio/Projects';
-import Contact from '@/components/portfolio/Contact';
 import Navigation from '@/components/portfolio/Navigation';
 
 const Index = () => {
@@ -28,10 +24,10 @@ const Index = () => {
     <div className="min-h-screen bg-background text-foreground">
       <Navigation />
       
-      {/* Theme Toggle */}
+      {/* Theme Toggle - Fixed positioning to avoid overlap */}
       <button
         onClick={toggleTheme}
-        className="fixed top-4 right-4 z-50 p-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+        className="fixed top-20 right-4 z-50 p-3 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-lg"
         aria-label="Toggle theme"
       >
         {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
@@ -39,10 +35,6 @@ const Index = () => {
 
       <main>
         <Hero />
-        <About />
-        <Skills />
-        <Projects />
-        <Contact />
       </main>
     </div>
   );
